@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Issues - Local Issues Reporter</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>🌍 Local Issues Reporter</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="report-issue.html" class="nav-link">Report Issue</a>
+                </li>
+                <li class="nav-item">
+                    <a href="view-issues.html" class="nav-link active">View Issues</a>
+                </li>
+                <li class="nav-item">
+                    <a href="volunteers.html" class="nav-link">Volunteers</a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin/login.html" class="nav-link">Admin</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Community Issues</h1>
+            <p>Track the progress of reported issues in our community</p>
+        </div>
+    </section>
+
+    <!-- Filters Section -->
+    <section class="filters-section">
+        <div class="container">
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label for="statusFilter">Status:</label>
+                    <select id="statusFilter" onchange="filterIssues()">
+                        <option value="all">All Issues</option>
+                        <option value="open">Open</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="categoryFilter">Category:</label>
+                    <select id="categoryFilter" onchange="filterIssues()">
+                        <option value="all">All Categories</option>
+                        <option value="pothole">Potholes</option>
+                        <option value="streetlight">Street Lights</option>
+                        <option value="water_supply">Water Supply</option>
+                        <option value="garbage">Garbage</option>
+                        <option value="public_transport">Public Transport</option>
+                        <option value="sidewalk">Sidewalk</option>
+                        <option value="traffic">Traffic</option>
+                        <option value="noise">Noise</option>
+                        <option value="park">Parks</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="sortBy">Sort by:</label>
+                    <select id="sortBy" onchange="filterIssues()">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="status">Status</option>
+                    </select>
+                </div>
+                <div class="search-group">
+                    <input type="text" id="searchInput" placeholder="Search issues..." onkeyup="filterIssues()">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Issues List -->
+    <section class="issues-section">
+        <div class="container">
+            <div class="issues-header">
+                <h2>Reported Issues</h2>
+                <div class="issues-count">
+                    <span id="issuesCount">Loading...</span> issues found
+                </div>
+            </div>
+            
+            <div id="issuesList" class="issues-list">
+                <!-- Issues will be loaded here via JavaScript -->
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading issues...</p>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div id="pagination" class="pagination">
+                <!-- Pagination buttons will be generated here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Issue Details Modal -->
+    <div id="issueModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="modalTitle">Issue Details</h2>
+                <span class="close" onclick="closeIssueModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="issue-details">
+                    <div class="issue-meta">
+                        <div class="meta-item">
+                            <strong>Issue ID:</strong>
+                            <span id="detailId"></span>
+                        </div>
+                        <div class="meta-item">
+                            <strong>Status:</strong>
+                            <span id="detailStatus" class="status-badge"></span>
+                        </div>
+                        <div class="meta-item">
+                            <strong>Category:</strong>
+                            <span id="detailCategory"></span>
+                        </div>
+                        <div class="meta-item">
+                            <strong>Reported:</strong>
+                            <span id="detailDate"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="issue-content">
+                        <div class="content-section">
+                            <h4>Location</h4>
+                            <p id="detailAddress"></p>
+                        </div>
+                        
+                        <div class="content-section">
+                            <h4>Description</h4>
+                            <p id="detailDescription"></p>
+                        </div>
+                        
+                        <div class="content-section">
+                            <h4>Reporter Information</h4>
+                            <p><strong>Name:</strong> <span id="detailName"></span></p>
+                            <p><strong>Email:</strong> <span id="detailEmail"></span></p>
+                            <p id="detailPhoneContainer" style="display:none;"><strong>Phone:</strong> <span id="detailPhone"></span></p>
+                        </div>
+                        
+                        <div id="detailPhotoContainer" class="content-section" style="display:none;">
+                            <h4>Photo Evidence</h4>
+                            <img id="detailPhoto" class="issue-photo" alt="Issue Photo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeIssueModal()">Close</button>
+                <a id="contactReporterBtn" href="#" class="btn btn-primary">Contact Reporter</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>🌍 Local Issues Reporter</h3>
+                    <p>Making our community better, one issue at a time.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="report-issue.html">Report Issue</a></li>
+                        <li><a href="view-issues.html">View Issues</a></li>
+                        <li><a href="volunteers.html">Volunteers</a></li>
+                        <li><a href="admin/login.html">Admin Login</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-envelope"></i> suhafathima3110@gmail.com</p>
+                    <p><i class="fas fa-phone"></i>+91 8861266616 </p>
+                    <p><i class="fas fa-map-marker-alt"></i> chikkamagluru,karnataka</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Local Issues Reporter. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/data-manager.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/view-issues.js"></script>
+</body>
+</html>

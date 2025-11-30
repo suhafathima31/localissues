@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Local Issues Reporter</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .admin-dashboard {
+            background: #f8f9fa;
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-nav {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .dashboard-nav button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-nav button.active,
+        .dashboard-nav button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .dashboard-content {
+            display: none;
+        }
+        
+        .dashboard-content.active {
+            display: block;
+        }
+        
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .admin-table {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .admin-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .admin-table th,
+        .admin-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .admin-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .admin-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status-select {
+            padding: 0.25rem 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.85rem;
+        }
+        
+        .priority-high { background: #e74c3c; }
+        .priority-medium { background: #f39c12; }
+        .priority-low { background: #27ae60; }
+        
+        .table-filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px 12px 0 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+    </style>
+</head>
+<body class="admin-dashboard">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="flex justify-between align-center">
+                <div>
+                    <h1>Admin Dashboard</h1>
+                    <p>Manage community issues and volunteer coordination</p>
+                </div>
+                <div>
+                    <a href="../index.html" class="btn btn-secondary">
+                        <i class="fas fa-home"></i> Back to Site
+                    </a>
+                    <button class="btn btn-primary" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            
+            <div class="dashboard-nav">
+                <button class="active" onclick="switchTab('overview')">
+                    <i class="fas fa-chart-pie"></i> Overview
+                </button>
+                <button onclick="switchTab('issues')">
+                    <i class="fas fa-exclamation-triangle"></i> Issues
+                </button>
+                <button onclick="switchTab('volunteers')">
+                    <i class="fas fa-users"></i> Volunteers
+                </button>
+                <button onclick="switchTab('reports')">
+                    <i class="fas fa-chart-bar"></i> Reports
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="container">
+        <!-- Overview Tab -->
+        <div id="overview-content" class="dashboard-content active">
+            <div class="stats-overview">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div class="stat-number" id="totalIssuesAdmin">0</div>
+                    <div class="stat-label">Total Issues</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-number" id="openIssuesAdmin">0</div>
+                    <div class="stat-label">Open Issues</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-number" id="resolvedIssuesAdmin">0</div>
+                    <div class="stat-label">Resolved Issues</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number" id="totalVolunteersAdmin">0</div>
+                    <div class="stat-label">Total Volunteers</div>
+                </div>
+            </div>
+
+            <div class="admin-table">
+                <div class="table-filters">
+                    <h3>Recent Issues</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Issue</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Reporter</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentIssuesTable">
+                        <tr>
+                            <td colspan="7" class="text-center">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Issues Tab -->
+        <div id="issues-content" class="dashboard-content">
+            <div class="admin-table">
+                <div class="table-filters">
+                    <h3>All Issues</h3>
+                    <div class="filters-grid">
+                        <div>
+                            <label for="adminStatusFilter">Status:</label>
+                            <select id="adminStatusFilter" onchange="filterAdminIssues()">
+                                <option value="all">All Statuses</option>
+                                <option value="open">Open</option>
+                                <option value="in_progress">In Progress</option>
+                                <option value="resolved">Resolved</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="adminCategoryFilter">Category:</label>
+                            <select id="adminCategoryFilter" onchange="filterAdminIssues()">
+                                <option value="all">All Categories</option>
+                                <option value="pothole">Potholes</option>
+                                <option value="streetlight">Street Lights</option>
+                                <option value="water_supply">Water Supply</option>
+                                <option value="garbage">Garbage</option>
+                                <option value="public_transport">Public Transport</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="adminDateFilter">Date Range:</label>
+                            <select id="adminDateFilter" onchange="filterAdminIssues()">
+                                <option value="all">All Time</option>
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" onclick="exportIssuesAdmin()">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Issue</th>
+                            <th>Category</th>
+                            <th>Reporter</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allIssuesTable">
+                        <tr>
+                            <td colspan="8" class="text-center">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Volunteers Tab -->
+        <div id="volunteers-content" class="dashboard-content">
+            <div class="admin-table">
+                <div class="table-filters">
+                    <h3>Registered Volunteers</h3>
+                    <div class="filters-grid">
+                        <div>
+                            <label for="adminAreaFilter">Area:</label>
+                            <select id="adminAreaFilter" onchange="filterAdminVolunteers()">
+                                  <option value="all">All Areas</option>
+                                 <option value="Uppalli">Uppalli</option>
+                                 <option value="Vijayapura">Vijayapura</option>
+                                 <option value="Gowrikalwe">Gowrikalwe</option>
+                                 <option value="Dantarmukhi">Dantarmukhi</option>
+                                 <option value="AIT circle">AIT circle</option>
+                                 <option value="Undedasarahalli">Undedasarahalli</option>
+                                  <option value="Jaynagar">Jaynagar</option>
+                                 <option value="Kote">Kote</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="adminSkillsSearch">Search Skills:</label>
+                            <input type="text" id="adminSkillsSearch" placeholder="Search skills..." onkeyup="filterAdminVolunteers()">
+                        </div>
+                        <div>
+                            <button class="btn btn-success" onclick="showAddVolunteerModal()">
+                                <i class="fas fa-plus"></i> Add Volunteer
+                            </button>
+                            <button class="btn btn-primary" onclick="exportVolunteersAdmin()">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Area</th>
+                            <th>Skills</th>
+                            <th>Availability</th>
+                            <th>Registered</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allVolunteersTable">
+                        <tr>
+                            <td colspan="9" class="text-center">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports-content" class="dashboard-content">
+            <div class="admin-table">
+                <div class="table-filters">
+                    <h3>Analytics & Reports</h3>
+                </div>
+                <div style="padding: 2rem; text-align: center; color: #6c757d;">
+                    <i class="fas fa-chart-bar" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <h4>Reporting Dashboard</h4>
+                    <p>Advanced analytics and reporting features coming soon...</p>
+                    <div style="margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="generateBasicReport()">
+                            <i class="fas fa-file-pdf"></i> Generate Basic Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Issue Detail Modal -->
+    <div id="adminIssueModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2>Issue Details</h2>
+                <span class="close" onclick="closeAdminIssueModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="adminIssueDetails">
+                    <!-- Issue details will be loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAdminIssueModal()">Close</button>
+                <button class="btn btn-success" onclick="updateIssueStatus()">Update Status</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Volunteer Modal -->
+    <div id="volunteerModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="volunteerModalTitle">Add New Volunteer</h2>
+                <span class="close" onclick="closeVolunteerModal()">&times;</span>
+            </div>
+            <form id="volunteerForm">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="volunteerName">Full Name *</label>
+                            <input type="text" id="volunteerName" name="name" required>
+                            <span class="error-message" id="volunteerNameError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="volunteerEmail">Email Address *</label>
+                            <input type="email" id="volunteerEmail" name="email" required>
+                            <span class="error-message" id="volunteerEmailError"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="volunteerPhone">Phone Number</label>
+                            <input type="tel" id="volunteerPhone" name="phone">
+                            <span class="error-message" id="volunteerPhoneError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="volunteerArea">Service Area *</label>
+                            <select id="volunteerArea" name="area" required>
+                                <option value="">Select an area</option>
+                                <option value="Uppalli">Uppalli</option>
+                                <option value="Vijayapura">Vijayapura</option>
+                                <option value="Gowrikalwe">Gowrikalwe</option>
+                                <option value="Dantarmukhi">Dantarmukhi</option>
+                                <option value="AIT circle">AIT circle</option>
+                                <option value="Undedasarahalli">Undedasarahalli</option>
+                                <option value="Jaynagar">Jaynagar</option>
+                                <option value="Kote">Kote</option>
+                                <option value="All areas">All areas</option>
+                            </select>
+                            <span class="error-message" id="volunteerAreaError"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="volunteerAvailability">Availability *</label>
+                        <select id="volunteerAvailability" name="availability" required>
+                            <option value="">Select availability</option>
+                            <option value="Weekdays">Weekdays</option>
+                            <option value="Weekends">Weekends</option>
+                            <option value="Evenings">Evenings</option>
+                            <option value="Flexible hours">Flexible hours</option>
+                            <option value="Remote work">Remote work</option>
+                        </select>
+                        <span class="error-message" id="volunteerAvailabilityError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="volunteerSkills">Skills & Expertise *</label>
+                        <textarea id="volunteerSkills" name="skills" rows="4" required placeholder="Describe your skills, experience, and areas of expertise..."></textarea>
+                        <span class="error-message" id="volunteerSkillsError"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeVolunteerModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> <span id="volunteerSubmitText">Add Volunteer</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/data-manager.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        // Admin Dashboard JavaScript
+        let adminData = {
+            issues: [],
+            volunteers: [],
+            filteredIssues: [],
+            filteredVolunteers: []
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAdminData();
+        });
+
+        // Switch between tabs
+        function switchTab(tabName) {
+            // Hide all content
+            document.querySelectorAll('.dashboard-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from nav buttons
+            document.querySelectorAll('.dashboard-nav button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected content
+            document.getElementById(tabName + '-content').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Load admin data
+        async function loadAdminData() {
+            try {
+                // Load data from PHP backend directly
+                const response = await fetch('../includes/admin_dashboard.php');
+                const result = await response.json();
+                
+                if (!result.success) {
+                    // Redirect to login if not authenticated
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                // Use data from backend
+                const issues = result.data.issues;
+                const volunteers = result.data.volunteers;
+
+                adminData.issues = issues.map(issue => ({
+                    ...issue,
+                    reporter_name: issue.reporter_name,
+                    reporter_email: issue.reporter_email
+                }));
+                adminData.volunteers = volunteers;
+
+                adminData.filteredIssues = [...adminData.issues];
+                adminData.filteredVolunteers = [...adminData.volunteers];
+
+                updateAdminStats(result.data.statistics);
+                displayRecentIssues();
+                displayAllIssues();
+                displayAllVolunteers();
+            } catch (error) {
+                console.error('Error loading admin data:', error);
+            }
+        }
+
+        // Update admin statistics
+        function updateAdminStats(statistics) {
+            if (statistics && statistics.issues) {
+                document.getElementById('totalIssuesAdmin').textContent = statistics.issues.total;
+                document.getElementById('openIssuesAdmin').textContent = statistics.issues.open;
+                document.getElementById('resolvedIssuesAdmin').textContent = statistics.issues.resolved;
+            } else {
+                // Fallback to calculating from local data
+                const totalIssues = adminData.issues.length;
+                const openIssues = adminData.issues.filter(i => i.status === 'open').length;
+                const resolvedIssues = adminData.issues.filter(i => i.status === 'resolved').length;
+                
+                document.getElementById('totalIssuesAdmin').textContent = totalIssues;
+                document.getElementById('openIssuesAdmin').textContent = openIssues;
+                document.getElementById('resolvedIssuesAdmin').textContent = resolvedIssues;
+            }
+            
+            if (statistics && statistics.volunteers) {
+                document.getElementById('totalVolunteersAdmin').textContent = statistics.volunteers.total;
+            } else {
+                document.getElementById('totalVolunteersAdmin').textContent = adminData.volunteers.length;
+            }
+        }
+
+        // Display recent issues
+        function displayRecentIssues() {
+            const recentIssues = adminData.issues.slice(0, 5);
+            const tableBody = document.getElementById('recentIssuesTable');
+            
+            if (recentIssues.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No issues found</td></tr>';
+                return;
+            }
+
+            tableBody.innerHTML = recentIssues.map(issue => `
+                <tr>
+                    <td>#${issue.id}</td>
+                    <td>${issue.title}</td>
+                    <td>${formatCategory(issue.category)}</td>
+                    <td>
+                        <span class="status-badge ${issue.status}">${formatStatus(issue.status)}</span>
+                    </td>
+                    <td>${issue.reporter_name}</td>
+                    <td>${formatDate(issue.created_at)}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-sm btn-primary" onclick="viewIssueDetails(${issue.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success" onclick="updateStatus(${issue.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Display all issues
+        function displayAllIssues() {
+            const tableBody = document.getElementById('allIssuesTable');
+            
+            if (adminData.filteredIssues.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="8" class="text-center">No issues found</td></tr>';
+                return;
+            }
+
+            tableBody.innerHTML = adminData.filteredIssues.map(issue => `
+                <tr>
+                    <td>#${issue.id}</td>
+                    <td>${issue.title}</td>
+                    <td>${formatCategory(issue.category)}</td>
+                    <td>${issue.reporter_name}</td>
+                    <td>${truncateText(issue.address, 30)}</td>
+                    <td>
+                        <select class="status-select" onchange="changeIssueStatus(${issue.id}, this.value)">
+                            <option value="open" ${issue.status === 'open' ? 'selected' : ''}>Open</option>
+                            <option value="in_progress" ${issue.status === 'in_progress' ? 'selected' : ''}>In Progress</option>
+                            <option value="resolved" ${issue.status === 'resolved' ? 'selected' : ''}>Resolved</option>
+                        </select>
+                    </td>
+                    <td>${formatDate(issue.created_at)}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-sm btn-primary" onclick="viewIssueDetails(${issue.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-primary" onclick="contactReporter('${issue.reporter_email}')">
+                                <i class="fas fa-envelope"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Display all volunteers
+        function displayAllVolunteers() {
+            const tableBody = document.getElementById('allVolunteersTable');
+            
+            if (adminData.filteredVolunteers.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="9" class="text-center">No volunteers found</td></tr>';
+                return;
+            }
+
+            tableBody.innerHTML = adminData.filteredVolunteers.map(volunteer => `
+                <tr>
+                    <td>#${volunteer.id}</td>
+                    <td>${volunteer.name}</td>
+                    <td>${volunteer.email}</td>
+                    <td>${volunteer.phone}</td>
+                    <td>${volunteer.area}</td>
+                    <td>${truncateText(volunteer.skills, 40)}</td>
+                    <td>${volunteer.availability}</td>
+                    <td>${formatDate(volunteer.created_at)}</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-primary" onclick="editVolunteer(${volunteer.id})" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-secondary" onclick="contactVolunteer('${volunteer.email}')" title="Contact">
+                                                <i class="fas fa-envelope"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" onclick="deleteVolunteer(${volunteer.id})" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Filter functions
+        function filterAdminIssues() {
+            const statusFilter = document.getElementById('adminStatusFilter').value;
+            const categoryFilter = document.getElementById('adminCategoryFilter').value;
+            const dateFilter = document.getElementById('adminDateFilter').value;
+            
+            adminData.filteredIssues = adminData.issues.filter(issue => {
+                const statusMatch = statusFilter === 'all' || issue.status === statusFilter;
+                const categoryMatch = categoryFilter === 'all' || issue.category === categoryFilter;
+                // Add date filtering logic here
+                return statusMatch && categoryMatch;
+            });
+            
+            displayAllIssues();
+        }
+
+        function filterAdminVolunteers() {
+            const areaFilter = document.getElementById('adminAreaFilter').value;
+            const skillsSearch = document.getElementById('adminSkillsSearch').value.toLowerCase();
+            
+            adminData.filteredVolunteers = adminData.volunteers.filter(volunteer => {
+                const areaMatch = areaFilter === 'all' || volunteer.area === areaFilter || volunteer.area === 'All areas';
+                const skillsMatch = !skillsSearch || volunteer.skills.toLowerCase().includes(skillsSearch);
+                return areaMatch && skillsMatch;
+            });
+            
+            displayAllVolunteers();
+        }
+
+        // Utility functions
+        function formatCategory(category) {
+            const names = {
+                pothole: 'Pothole',
+                streetlight: 'Street Light',
+                water_supply: 'Water Supply',
+                garbage: 'Garbage',
+                public_transport: 'Public Transport',
+                other: 'Other'
+            };
+            return names[category] || 'Other';
+        }
+
+        function formatStatus(status) {
+            const statuses = {
+                open: 'Open',
+                in_progress: 'In Progress',
+                resolved: 'Resolved'
+            };
+            return statuses[status] || 'Unknown';
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString();
+        }
+
+        function truncateText(text, maxLength) {
+            if (text.length <= maxLength) return text;
+            return text.substring(0, maxLength) + '...';
+        }
+
+        // Action functions
+        function viewIssueDetails(issueId) {
+            const issue = adminData.issues.find(i => i.id === issueId);
+            if (issue) {
+                document.getElementById('adminIssueDetails').innerHTML = `
+                    <h4>Issue #${issue.id}: ${issue.title}</h4>
+                    <p><strong>Category:</strong> ${formatCategory(issue.category)}</p>
+                    <p><strong>Status:</strong> ${formatStatus(issue.status)}</p>
+                    <p><strong>Location:</strong> ${issue.address}</p>
+                    <p><strong>Description:</strong> ${issue.description}</p>
+                    <p><strong>Reporter:</strong> ${issue.reporter_name} (${issue.reporter_email})</p>
+                    <p><strong>Reported:</strong> ${formatDate(issue.created_at)}</p>
+                `;
+                document.getElementById('adminIssueModal').style.display = 'block';
+            }
+        }
+
+        function closeAdminIssueModal() {
+            document.getElementById('adminIssueModal').style.display = 'none';
+        }
+
+        async function changeIssueStatus(issueId, newStatus) {
+            try {
+                const response = await fetch('../includes/admin_update_issue.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        issue_id: issueId,
+                        status: newStatus
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showToast(`Issue #${issueId} status updated to ${formatStatus(newStatus)}`, 'success');
+                    // Reload the dashboard data
+                    loadAdminData();
+                } else {
+                    showToast(result.message || 'Failed to update issue status', 'error');
+                }
+            } catch (error) {
+                console.error('Error updating issue status:', error);
+                showToast('Network error occurred', 'error');
+            }
+        }
+
+        function contactReporter(email) {
+            window.open(`mailto:${email}?subject=Regarding your issue report`, '_blank');
+        }
+
+        function contactVolunteer(email) {
+            window.open(`mailto:${email}?subject=Volunteer coordination request`, '_blank');
+        }
+
+        function exportIssuesAdmin() {
+            const csvRows = [];
+            csvRows.push(['ID', 'Title', 'Category', 'Status', 'Reporter', 'Email', 'Address', 'Created']);
+            
+            adminData.issues.forEach(issue => {
+                csvRows.push([
+                    issue.id,
+                    issue.title,
+                    issue.category,
+                    issue.status,
+                    issue.reporter_name,
+                    issue.reporter_email,
+                    issue.address,
+                    new Date(issue.created_at).toLocaleDateString()
+                ]);
+            });
+            
+            const csvContent = csvRows.map(row => row.map(field => `"${field}"`).join(',')).join('\n');
+            downloadCSV(csvContent, 'admin-issues-export.csv');
+            showToast('Issues exported successfully!', 'success');
+        }
+
+        function exportVolunteersAdmin() {
+            const csvRows = [];
+            csvRows.push(['ID', 'Name', 'Email', 'Phone', 'Area', 'Skills', 'Availability', 'Created']);
+            
+            adminData.volunteers.forEach(volunteer => {
+                csvRows.push([
+                    volunteer.id,
+                    volunteer.name,
+                    volunteer.email,
+                    volunteer.phone || '',
+                    volunteer.area,
+                    volunteer.skills,
+                    volunteer.availability,
+                    new Date(volunteer.created_at).toLocaleDateString()
+                ]);
+            });
+            
+            const csvContent = csvRows.map(row => row.map(field => `"${field}"`).join(',')).join('\n');
+            downloadCSV(csvContent, 'admin-volunteers-export.csv');
+            showToast('Volunteers exported successfully!', 'success');
+        }
+        
+        function downloadCSV(csvContent, filename) {
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        function generateBasicReport() {
+            showToast('Report generation started. You will receive an email when ready.', 'info');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                fetch('../includes/admin_logout.php', { method: 'POST' })
+                    .then(() => {
+                        window.location.href = 'login.html';
+                    })
+                    .catch(() => {
+                        // Even if logout request fails, redirect to login
+                        window.location.href = 'login.html';
+                    });
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info', duration = 3000) {
+            // Create toast container if it doesn't exist
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                container.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    z-index: 10000;
+                    max-width: 400px;
+                `;
+                document.body.appendChild(container);
+            }
+            
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.style.cssText = `
+                background: ${type === 'success' ? '#27ae60' : type === 'error' ? '#e74c3c' : '#3498db'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                margin-bottom: 10px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                cursor: pointer;
+            `;
+            
+            const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle';
+            toast.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
+            
+            container.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto remove
+            setTimeout(() => {
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (container.contains(toast)) {
+                        container.removeChild(toast);
+                        if (container.children.length === 0) {
+                            document.body.removeChild(container);
+                        }
+                    }
+                }, 300);
+            }, duration);
+            
+            // Click to dismiss
+            toast.addEventListener('click', () => {
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (container.contains(toast)) {
+                        container.removeChild(toast);
+                        if (container.children.length === 0) {
+                            document.body.removeChild(container);
+                        }
+                    }
+                }, 300);
+            });
+        }
+
+        // Volunteer Management Functions
+        let currentEditingVolunteer = null;
+
+        // Show add volunteer modal
+        function showAddVolunteerModal() {
+            currentEditingVolunteer = null;
+            document.getElementById('volunteerModalTitle').textContent = 'Add New Volunteer';
+            document.getElementById('volunteerSubmitText').textContent = 'Add Volunteer';
+            document.getElementById('volunteerForm').reset();
+            clearVolunteerErrors();
+            document.getElementById('volunteerModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Edit volunteer
+        function editVolunteer(volunteerId) {
+            const volunteer = adminData.volunteers.find(v => v.id === volunteerId);
+            if (!volunteer) {
+                showToast('Volunteer not found', 'error');
+                return;
+            }
+
+            currentEditingVolunteer = volunteer;
+            document.getElementById('volunteerModalTitle').textContent = 'Edit Volunteer';
+            document.getElementById('volunteerSubmitText').textContent = 'Update Volunteer';
+            
+            // Populate form
+            document.getElementById('volunteerName').value = volunteer.name;
+            document.getElementById('volunteerEmail').value = volunteer.email;
+            document.getElementById('volunteerPhone').value = volunteer.phone || '';
+            document.getElementById('volunteerArea').value = volunteer.area;
+            document.getElementById('volunteerAvailability').value = volunteer.availability;
+            document.getElementById('volunteerSkills').value = volunteer.skills;
+            
+            clearVolunteerErrors();
+            document.getElementById('volunteerModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Delete volunteer
+        function deleteVolunteer(volunteerId) {
+            const volunteer = adminData.volunteers.find(v => v.id === volunteerId);
+            if (!volunteer) {
+                showToast('Volunteer not found', 'error');
+                return;
+            }
+
+            if (confirm(`Are you sure you want to delete volunteer "${volunteer.name}"? This action cannot be undone.`)) {
+                fetch('../includes/admin_manage_volunteers.php', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: volunteerId })
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        showToast(`Volunteer "${volunteer.name}" deleted successfully`, 'success');
+                        loadAdminData(); // Refresh data
+                    } else {
+                        showToast(result.message || 'Failed to delete volunteer', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting volunteer:', error);
+                    showToast('Network error occurred', 'error');
+                });
+            }
+        }
+
+        // Close volunteer modal
+        function closeVolunteerModal() {
+            document.getElementById('volunteerModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            currentEditingVolunteer = null;
+            document.getElementById('volunteerForm').reset();
+            clearVolunteerErrors();
+        }
+
+        // Handle volunteer form submission
+        document.getElementById('volunteerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!validateVolunteerForm()) {
+                return;
+            }
+
+            const formData = new FormData(this);
+            const volunteerData = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                skills: formData.get('skills'),
+                availability: formData.get('availability'),
+                area: formData.get('area')
+            };
+
+            if (currentEditingVolunteer) {
+                volunteerData.id = currentEditingVolunteer.id;
+            }
+
+            const method = currentEditingVolunteer ? 'PUT' : 'POST';
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalText = submitButton.innerHTML;
+            
+            try {
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+                const response = await fetch('../includes/admin_manage_volunteers.php', {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(volunteerData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const action = currentEditingVolunteer ? 'updated' : 'added';
+                    showToast(`Volunteer ${action} successfully!`, 'success');
+                    closeVolunteerModal();
+                    loadAdminData(); // Refresh data
+                } else {
+                    if (result.data && result.data.errors) {
+                        result.data.errors.forEach(error => showToast(error, 'error'));
+                    } else {
+                        showToast(result.message || 'Failed to save volunteer', 'error');
+                    }
+                }
+            } catch (error) {
+                console.error('Error saving volunteer:', error);
+                showToast('Network error occurred', 'error');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalText;
+            }
+        });
+
+        // Validate volunteer form
+        function validateVolunteerForm() {
+            clearVolunteerErrors();
+            let isValid = true;
+
+            const name = document.getElementById('volunteerName').value.trim();
+            const email = document.getElementById('volunteerEmail').value.trim();
+            const skills = document.getElementById('volunteerSkills').value.trim();
+            const area = document.getElementById('volunteerArea').value;
+            const availability = document.getElementById('volunteerAvailability').value;
+
+            if (!name) {
+                showVolunteerError('volunteerName', 'Name is required');
+                isValid = false;
+            }
+
+            if (!email) {
+                showVolunteerError('volunteerEmail', 'Email is required');
+                isValid = false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showVolunteerError('volunteerEmail', 'Please enter a valid email address');
+                isValid = false;
+            }
+
+            if (!skills) {
+                showVolunteerError('volunteerSkills', 'Skills are required');
+                isValid = false;
+            } else if (skills.length < 10) {
+                showVolunteerError('volunteerSkills', 'Please provide more detail about skills');
+                isValid = false;
+            }
+
+            if (!area) {
+                showVolunteerError('volunteerArea', 'Service area is required');
+                isValid = false;
+            }
+
+            if (!availability) {
+                showVolunteerError('volunteerAvailability', 'Availability is required');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Show volunteer form error
+        function showVolunteerError(fieldId, message) {
+            const errorElement = document.getElementById(fieldId + 'Error');
+            const fieldElement = document.getElementById(fieldId);
+            
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+            
+            if (fieldElement) {
+                fieldElement.style.borderColor = '#e74c3c';
+            }
+        }
+
+        // Clear volunteer form errors
+        function clearVolunteerErrors() {
+            document.querySelectorAll('#volunteerModal .error-message').forEach(error => {
+                error.textContent = '';
+                error.style.display = 'none';
+            });
+            
+            document.querySelectorAll('#volunteerModal input, #volunteerModal select, #volunteerModal textarea').forEach(field => {
+                field.style.borderColor = '#e9ecef';
+            });
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('volunteerModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVolunteerModal();
+            }
+        });
+
+        // Add some CSS utility classes
+        const style = document.createElement('style');
+        style.textContent = `
+            .flex { display: flex; }
+            .justify-between { justify-content: space-between; }
+            .align-center { align-items: center; }
+            .text-center { text-align: center; }
+            .form-row { display: flex; gap: 1rem; }
+            .form-row .form-group { flex: 1; }
+            .modal { z-index: 10000; }
+            .error-message { color: #e74c3c; font-size: 0.8rem; margin-top: 0.25rem; display: none; }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

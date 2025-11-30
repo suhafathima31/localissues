@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report an Issue - Local Issues Reporter</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>🌍 Local Issues Reporter</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="report-issue.html" class="nav-link active">Report Issue</a>
+                </li>
+                <li class="nav-item">
+                    <a href="view-issues.html" class="nav-link">View Issues</a>
+                </li>
+                <li class="nav-item">
+                    <a href="volunteers.html" class="nav-link">Volunteers</a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin/login.html" class="nav-link">Admin</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Report Issue Form -->
+    <section class="report-form-section">
+        <div class="container">
+            <div class="form-header">
+                <h1>Report a Community Issue</h1>
+                <p>Help us make our community better by reporting issues that need attention. Your report will be reviewed by local authorities and volunteers.</p>
+            </div>
+
+            <div class="form-container">
+                <div class="progress-bar">
+                    <div class="progress-step active" data-step="1">
+                        <div class="step-circle">1</div>
+                        <div class="step-label">Your Info</div>
+                    </div>
+                    <div class="progress-step" data-step="2">
+                        <div class="step-circle">2</div>
+                        <div class="step-label">Issue Details</div>
+                    </div>
+                    <div class="progress-step" data-step="3">
+                        <div class="step-circle">3</div>
+                        <div class="step-label">Photo & Review</div>
+                    </div>
+                </div>
+
+                <form id="reportForm" method="POST" enctype="multipart/form-data">
+                    <!-- Step 1: Personal Information -->
+                    <div class="form-step active" id="step1">
+                        <h3>Your Information</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="name">Full Name *</label>
+                                <input type="text" id="name" name="name" required>
+                                <span class="error-message" id="nameError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required>
+                                <span class="error-message" id="emailError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone">
+                                <small>Optional - for follow-up contact</small>
+                            </div>
+                        </div>
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-primary next-btn" onclick="nextStep()">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Issue Details -->
+                    <div class="form-step" id="step2">
+                        <h3>Issue Details</h3>
+                        <div class="form-group">
+                            <label for="address">Location/Address *</label>
+                            <textarea id="address" name="address" rows="2" required placeholder="Please provide the exact location or address where the issue is located"></textarea>
+                            <span class="error-message" id="addressError"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="issueType">Issue Category *</label>
+                            <select id="issueType" name="issue_type" required>
+                                <option value="">Select an issue category</option>
+                                <option value="pothole">🛣️ Potholes & Road Damage</option>
+                                <option value="streetlight">💡 Street Lighting</option>
+                                <option value="water_supply">💧 Water Supply Issues</option>
+                                <option value="garbage">🗑️ Garbage & Waste Management</option>
+                                <option value="public_transport">🚌 Public Transportation</option>
+                                <option value="sidewalk">🚶 Sidewalk & Walkway Issues</option>
+                                <option value="traffic">🚦 Traffic Signals & Signs</option>
+                                <option value="noise">🔊 Noise Complaints</option>
+                                <option value="park">🌳 Parks & Recreation</option>
+                                <option value="other">❗ Other Issues</option>
+                            </select>
+                            <span class="error-message" id="issueTypeError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Issue Description *</label>
+                            <textarea id="description" name="description" rows="4" required placeholder="Please describe the issue in detail. Include when you first noticed it and how it affects the community."></textarea>
+                            <span class="error-message" id="descriptionError"></span>
+                        </div>
+
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-secondary prev-btn" onclick="prevStep()">Previous</button>
+                            <button type="button" class="btn btn-primary next-btn" onclick="nextStep()">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Photo Upload and Review -->
+                    <div class="form-step" id="step3">
+                        <h3>Photo Evidence & Review</h3>
+                        <div class="form-group">
+                            <label for="photo">Upload Photo (Optional)</label>
+                            <div class="file-upload-area" id="fileUploadArea">
+                                <input type="file" id="photo" name="photo" accept="image/*" onchange="previewImage(event)">
+                                <div class="upload-text">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Click to upload or drag and drop</p>
+                                    <small>Maximum file size: 5MB. Supported formats: JPG, PNG, GIF</small>
+                                </div>
+                            </div>
+                            <div id="imagePreview" class="image-preview"></div>
+                        </div>
+
+                        <!-- Review Section -->
+                        <div class="review-section">
+                            <h4>Review Your Report</h4>
+                            <div class="review-grid">
+                                <div class="review-item">
+                                    <label>Name:</label>
+                                    <span id="reviewName"></span>
+                                </div>
+                                <div class="review-item">
+                                    <label>Email:</label>
+                                    <span id="reviewEmail"></span>
+                                </div>
+                                <div class="review-item">
+                                    <label>Phone:</label>
+                                    <span id="reviewPhone"></span>
+                                </div>
+                                <div class="review-item">
+                                    <label>Location:</label>
+                                    <span id="reviewAddress"></span>
+                                </div>
+                                <div class="review-item">
+                                    <label>Category:</label>
+                                    <span id="reviewIssueType"></span>
+                                </div>
+                                <div class="review-item">
+                                    <label>Description:</label>
+                                    <span id="reviewDescription"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="agree" name="agree" required>
+                                <span class="checkmark"></span>
+                                I confirm that the information provided is accurate and I agree to the terms of service.
+                            </label>
+                            <span class="error-message" id="agreeError"></span>
+                        </div>
+
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-secondary prev-btn" onclick="prevStep()">Previous</button>
+                            <button type="submit" class="btn btn-success submit-btn">
+                                <i class="fas fa-paper-plane"></i> Submit Report
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Notice -->
+    <section class="emergency-notice">
+        <div class="container">
+            <div class="notice-card">
+                <div class="notice-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="notice-content">
+                    <h4>Emergency Situations</h4>
+                    <p>For immediate emergencies that pose a threat to public safety, please contact your local emergency services directly at <strong>911</strong> or your local emergency number.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>🌍 Local Issues Reporter</h3>
+                    <p>Making our community better, one issue at a time.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="report-issue.html">Report Issue</a></li>
+                        <li><a href="view-issues.html">View Issues</a></li>
+                        <li><a href="volunteers.html">Volunteers</a></li>
+                        <li><a href="admin/login.html">Admin Login</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-envelope"></i>suhafathima3110@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> +91 886126616</p>
+                    <p><i class="fas fa-map-marker-alt"></i> chikkamagaluru,karnataka</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; Local Issues Reporter. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-check-circle"></i> Report Submitted Successfully!</h2>
+            </div>
+            <div class="modal-body">
+                <p>Thank you for reporting this issue. Your report has been submitted and will be reviewed by local authorities.</p>
+                <p><strong>Reference ID:</strong> <span id="referenceId"></span></p>
+                <p>You will receive email updates about the status of your report.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeModal()">OK</button>
+                <a href="view-issues.html" class="btn btn-secondary">View All Issues</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data-manager.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/report-form.js"></script>
+</body>
+</html>

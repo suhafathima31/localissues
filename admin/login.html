@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Local Issues Reporter</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="login-body">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="../index.html">
+                    <h2>🌍 Local Issues Reporter</h2>
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="../index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../report-issue.html" class="nav-link">Report Issue</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../view-issues.html" class="nav-link">View Issues</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../volunteers.html" class="nav-link">Volunteers</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Login Form -->
+    <section class="login-section">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="login-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h2>Municipal Admin Login</h2>
+                    <p>Access the administrative dashboard to manage community issues</p>
+                </div>
+
+                <form id="loginForm" method="POST">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="username" name="username" required>
+                        </div>
+                        <span class="error-message" id="usernameError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword()">
+                                <i class="fas fa-eye" id="passwordToggleIcon"></i>
+                            </button>
+                        </div>
+                        <span class="error-message" id="passwordError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="remember" name="remember">
+                            <span class="checkmark"></span>
+                            Remember me on this device
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary login-btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login to Dashboard
+                    </button>
+                </form>
+
+                <div class="login-footer">
+                    <div class="login-help">
+                        <p>Need help accessing your account?</p>
+                        <a href="suha fathima:suhafathima3110@gmail.com">Contact IT Support</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo Credentials Card -->
+            <div class="demo-credentials">
+                <div class="demo-header">
+                    <i class="fas fa-info-circle"></i>
+                    <h3>Demo Credentials</h3>
+                </div>
+                <div class="demo-content">
+                    <p>For demonstration purposes, use:</p>
+                    <div class="credentials">
+                        <div class="credential-item">
+                            <strong>Username:</strong> <code>admin</code>
+                        </div>
+                        <div class="credential-item">
+                            <strong>Password:</strong> <code>admin123</code>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary btn-small" onclick="fillDemoCredentials()">
+                        Use Demo Credentials
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="admin-features">
+        <div class="container">
+            <h2>Administrative Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3>Issue Management</h3>
+                    <p>View, update, and manage all reported community issues from a central dashboard.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Analytics & Reports</h3>
+                    <p>Generate reports and view analytics on issue resolution rates and community engagement.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <h3>Volunteer Coordination</h3>
+                    <p>Manage volunteer registrations and coordinate community assistance efforts.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Communication Tools</h3>
+                    <p>Send updates to reporters and coordinate with municipal departments efficiently.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Notice -->
+    <section class="security-notice">
+        <div class="container">
+            <div class="notice-card">
+                <div class="notice-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="notice-content">
+                    <h3>Secure Access</h3>
+                    <p>This administrative area is restricted to authorized municipal personnel only. All access is logged and monitored for security purposes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>🌍 Local Issues Reporter</h3>
+                    <p>Making our community better, one issue at a time.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>For Municipal Staff</h4>
+                    <ul>
+                        <li><a href="suha fathima:suhafathima3110@gmail.com">Technical Support</a></li>
+                        <li><a href="suha fathima:suhfathima3110@gmail.com">General Inquiries</a></li>
+                        <li><a href="#">User Manual</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact IT</h4>
+                    <p><i class="fas fa-envelope"></i> suhafathima3110@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> +91 8861266616</p>
+                    <p><i class="fas fa-clock"></i> Mon-Fri, 8AM-5PM</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Local Issues Reporter. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Success/Error Modal -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Login Status</h2>
+                <span class="close" onclick="closeMessageModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="modalMessage" class="modal-message">
+                    <!-- Message will be inserted here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeMessageModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/data-manager.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        // Fill demo credentials
+        function fillDemoCredentials() {
+            document.getElementById('username').value = 'admin';
+            document.getElementById('password').value = 'admin123';
+        }
+
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('passwordToggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.className = 'fas fa-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.className = 'fas fa-eye';
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                showMessage('Error', 'Please fill in all fields.', 'error');
+                return;
+            }
+            
+            // Show loading state
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalText = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            
+            try {
+                // Submit to PHP backend
+                const response = await fetch('../includes/admin_login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const result = await response.json();
+                
+                // Reset button
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalText;
+                
+                if (result.success) {
+                    showMessage('Success', 'Login successful! Redirecting to dashboard...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                } else {
+                    showMessage('Error', result.message || 'Invalid username or password.', 'error');
+                }
+            } catch (error) {
+                // Reset button
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalText;
+                
+                console.error('Login error:', error);
+                showMessage('Error', 'Network error occurred. Please try again.', 'error');
+            }
+        });
+
+        // Show message modal
+        function showMessage(title, message, type) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').innerHTML = `<p class="${type}">${message}</p>`;
+            document.getElementById('messageModal').style.display = 'block';
+        }
+
+        // Close message modal
+        function closeMessageModal() {
+            document.getElementById('messageModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

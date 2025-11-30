@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌍 Local Issues Reporter - Making Our Community Better</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>🌍 Local Issues Reporter</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link active">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="report-issue.html" class="nav-link">Report Issue</a>
+                </li>
+                <li class="nav-item">
+                    <a href="view-issues.html" class="nav-link">View Issues</a>
+                </li>
+                <li class="nav-item">
+                    <a href="volunteers.html" class="nav-link">Volunteers</a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin/login.html" class="nav-link">Admin</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Making Our Community Better Together</h1>
+            <p>Report local issues, connect with volunteers, and help improve our neighborhood. Your voice matters in building a better community.</p>
+            <div class="hero-buttons">
+                <a href="report-issue.html" class="btn btn-primary">Report an Issue</a>
+                <a href="view-issues.html" class="btn btn-secondary">View Reported Issues</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <i class="fas fa-city hero-icon"></i>
+        </div>
+    </section>
+
+    <!-- Issue Categories -->
+    <section class="categories">
+        <div class="container">
+            <h2 class="section-title">Common Issue Categories</h2>
+            <div class="categories-grid">
+                <div class="category-card" data-category="pothole">
+                    <div class="category-icon">
+                        <i class="fas fa-road"></i>
+                    </div>
+                    <h3>Potholes</h3>
+                    <p>Report road damage and potholes affecting traffic safety</p>
+                </div>
+                <div class="category-card" data-category="streetlight">
+                    <div class="category-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Street Lights</h3>
+                    <p>Report broken or malfunctioning street lights</p>
+                </div>
+                <div class="category-card" data-category="water_supply">
+                    <div class="category-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <h3>Water Supply</h3>
+                    <p>Report water supply issues and pipe leaks</p>
+                </div>
+                <div class="category-card" data-category="garbage">
+                    <div class="category-icon">
+                        <i class="fas fa-trash"></i>
+                    </div>
+                    <h3>Garbage Issues</h3>
+                    <p>Report illegal dumping and garbage collection problems</p>
+                </div>
+                <div class="category-card" data-category="public_transport">
+                    <div class="category-icon">
+                        <i class="fas fa-bus"></i>
+                    </div>
+                    <h3>Public Transport</h3>
+                    <p>Report bus stop damage and transport issues</p>
+                </div>
+                <div class="category-card" data-category="other">
+                    <div class="category-icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <h3>Other Issues</h3>
+                    <p>Report any other community issues not listed above</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="stats">
+        <div class="container">
+            <h2 class="section-title">Community Impact</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalIssues">0</div>
+                    <div class="stat-label">Issues Reported</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="resolvedIssues">0</div>
+                    <div class="stat-label">Issues Resolved</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="activeVolunteers">0</div>
+                    <div class="stat-label">Active Volunteers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="inProgressIssues">0</div>
+                    <div class="stat-label">Issues In Progress</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Report the Issue</h3>
+                        <p>Fill out our simple form with details about the issue, including location and photo evidence.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Municipal Review</h3>
+                        <p>Local authorities receive your report and begin the review process to address the issue.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Community Action</h3>
+                        <p>Volunteers and municipal teams work together to resolve the issue and improve our community.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Issues -->
+    <section class="recent-issues">
+        <div class="container">
+            <h2 class="section-title">Recent Issues</h2>
+            <div id="recentIssuesList" class="issues-grid">
+                <!-- Recent issues will be loaded here via JavaScript -->
+            </div>
+            <div class="text-center">
+                <a href="view-issues.html" class="btn btn-primary">View All Issues</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CivicCare</h3>
+                    <p>Making our community better, one issue at a time.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="report-issue.html">Report Issue</a></li>
+                        <li><a href="view-issues.html">View Issues</a></li>
+                    <li><a href="volunteers.html">Volunteers</a></li>
+                    <li><a href="admin/login.html" class="admin-link">Admin</a></li>
+                    <li><a href="council/login.html" class="council-link">Council</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-envelope"></i> suhafathima3110@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> +91 8861266616 </p>
+                    <p><i class="fas fa-map-marker-alt"></i> chikkamagaluru, karnataka</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; Local Issues Reporter. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/data-manager.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

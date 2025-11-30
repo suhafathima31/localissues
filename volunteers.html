@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteers - Local Issues Reporter</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>🌍 Local Issues Reporter</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="report-issue.html" class="nav-link">Report Issue</a>
+                </li>
+                <li class="nav-item">
+                    <a href="view-issues.html" class="nav-link">View Issues</a>
+                </li>
+                <li class="nav-item">
+                    <a href="volunteers.html" class="nav-link active">Volunteers</a>
+                </li>
+                <li class="nav-item">
+                    <a href="admin/login.html" class="nav-link">Admin</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Community Volunteers</h1>
+            <p>Connect with local volunteers who are ready to help with community issues</p>
+        </div>
+    </section>
+
+    <!-- Volunteer Registration CTA -->
+    <section class="volunteer-cta">
+        <div class="container">
+            <div class="cta-card">
+                <div class="cta-content">
+                    <h2>Become a Community Volunteer</h2>
+                    <p>Join our network of dedicated volunteers helping to make our community better. Whether you have specialized skills or just want to help, we welcome your contribution.</p>
+                    <button class="btn btn-primary" onclick="openVolunteerModal()">
+                        <i class="fas fa-hand-helping"></i> Register as Volunteer
+                    </button>
+                </div>
+                <div class="cta-image">
+                    <i class="fas fa-users hero-icon"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search and Filter -->
+    <section class="volunteer-filters">
+        <div class="container">
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label for="areaFilter">Area:</label>
+                    <select id="areaFilter" onchange="filterVolunteers()">
+                        <option value="all">All Areas</option>
+                        <option value="Uppalli">Uppalli</option>
+                        <option value="Vijayapura">Vijayapura</option>
+                        <option value="Gowrikalwe">Gowrikalwe</option>
+                        <option value="Dantarmukhi">Dantarmukhi</option>
+                        <option value="AIT circle">AIT circle</option>
+                        <option value="Undedasarahalli">Undedasarahalli</option>
+                        <option value="Jaynagar">Jaynagar</option>
+                        <option value="Kote">Kote</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="skillFilter">Skills:</label>
+                    <select id="skillFilter" onchange="filterVolunteers()">
+                        <option value="all">All Skills</option>
+                        <option value="plumbing">Plumbing</option>
+                        <option value="electrical">Electrical</option>
+                        <option value="construction">Construction</option>
+                        <option value="cleanup">Environmental Cleanup</option>
+                        <option value="organizing">Community Organizing</option>
+                        <option value="it">IT Support</option>
+                        <option value="first_aid">First Aid</option>
+                    </select>
+                </div>
+                <div class="search-group">
+                    <input type="text" id="volunteerSearch" placeholder="Search volunteers..." onkeyup="filterVolunteers()">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Volunteers List -->
+    <section class="volunteers-section">
+        <div class="container">
+            <div class="volunteers-header">
+                <h2>Available Volunteers</h2>
+                <div class="volunteers-count">18
+                    <span id="volunteerCount">9</span>
+                    "volunteers available "
+                </div>
+            </div>
+            <div id="volunteersList" class="volunteers-grid">
+                <div class="volunteer-card"> 
+                    <div class="volunteer-header">
+                        <div class="volunteer-avatar">Q</div> 
+                        <div class="volunteer-name">qwerty 123</div>
+                    </div>
+                    <div class="volunteer-info">
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt">
+                                ::before
+                            </i>
+                            <span>Upplli</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-clock">
+                                ::before
+                            </i>
+                            <span>weekends</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-calender-plus">
+                                ::before
+                            </i>
+                            <span>joined 1 day ago</span>
+                        </div>
+                    </div>
+                    
+            <div id="volunteersList" class="volunteers-grid">
+                <div class="volunteer-card">
+                    <div class="volunteers-header">
+                        <div class="volunteer-avatar">V</div>
+                        <div class="volunteer-name">qwerty</div>
+                    </div>
+                    <div class="volunteer-info">
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt">
+                                ::before
+                            </i>
+                            <span>Upplli</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-clock">
+                                ::before
+                            </i>
+                            <span>weekends</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-calender-plus">
+                                ::before
+                            </i>
+                            <span>joined 1 day ago</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Volunteer Registration Modal -->
+    <div id="volunteerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-plus"></i> Register as Volunteer</h2>
+                <span class="close" onclick="closeVolunteerModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="volunteerForm" method="POST">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="volName">Full Name *</label>
+                            <input type="text" id="volName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="volEmail">Email Address *</label>
+                            <input type="email" id="volEmail" name="email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="volPhone">Phone Number *</label>
+                        <input type="tel" id="volPhone" name="phone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="volArea">Service Area</label>
+                        <select id="volArea" name="area">
+                         <option value="all">All Skills</option>
+                         <option value="plumbing">Plumbing</option>
+                         <option value="electrical">Electrical</option>
+                         <option value="construction">Construction</option>
+                         <option value="cleanup">Environmental Cleanup</option>
+                         <option value="organizing">Community Organizing</option>
+                         <option value="it">IT Support</option>
+                         <option value="first_aid">First Aid</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="volSkills">Skills & Expertise</label>
+                        <textarea id="volSkills" name="skills" rows="3" placeholder="List your skills, experience, or areas where you can help (e.g., Plumbing, Electrical work, Community organizing, etc.)"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="volAvailability">Availability</label>
+                        <select id="volAvailability" name="availability">
+                            <option value="Weekdays">Weekdays</option>
+                            <option value="Weekends">Weekends</option>
+                            <option value="Evenings">Evenings</option>
+                            <option value="Flexible hours">Flexible Hours</option>
+                            <option value="Emergency only">Emergency Only</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="volAgree" name="agree" required>
+                            <span class="checkmark"></span>
+                            I agree to be contacted by community members and local authorities for volunteer opportunities.
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeVolunteerModal()">Cancel</button>
+                <button type="submit" form="volunteerForm" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Register
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Volunteer Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-envelope"></i> Contact Volunteer</h2>
+                <span class="close" onclick="closeContactModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="contactInfo" class="contact-info">
+                    <!-- Volunteer contact information will be displayed here -->
+                </div>
+                <div class="contact-methods">
+                    <h4>Contact Methods:</h4>
+                    <div class="contact-buttons">
+                        <a id="emailContact" href="#" class="btn btn-primary">
+                            <i class="fas fa-envelope"></i> Send Email
+                        </a>
+                        <a id="phoneContact" href="#" class="btn btn-secondary">
+                            <i class="fas fa-phone"></i> Call
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeContactModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Section -->
+    <section class="help-section">
+        <div class="container">
+            <h2>How Volunteers Help Our Community</h2>
+            <div class="help-grid">
+                <div class="help-card">
+                    <div class="help-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>Technical Skills</h3>
+                    <p>Volunteers with plumbing, electrical, and construction skills help with infrastructure repairs and improvements.</p>
+                </div>
+                <div class="help-card">
+                    <div class="help-icon">
+                        <i class="fas fa-broom"></i>
+                    </div>
+                    <h3>Community Cleanup</h3>
+                    <p>Environmental volunteers organize and participate in community cleanup drives and beautification projects.</p>
+                </div>
+                <div class="help-card">
+                    <div class="help-icon">
+                        <i class="fas fa-megaphone"></i>
+                    </div>
+                    <h3>Advocacy & Organization</h3>
+                    <p>Community organizers help raise awareness about issues and coordinate group actions for positive change.</p>
+                </div>
+                <div class="help-card">
+                    <div class="help-icon">
+                        <i class="fas fa-first-aid"></i>
+                    </div>
+                    <h3>Emergency Response</h3>
+                    <p>First aid certified volunteers provide immediate assistance during community emergencies and events.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>🌍 Local Issues Reporter</h3>
+                    <p>Making our community better, one issue at a time.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="report-issue.html">Report Issue</a></li>
+                        <li><a href="view-issues.html">View Issues</a></li>
+                        <li><a href="volunteers.html">Volunteers</a></li>
+                        <li><a href="admin/login.html">Admin Login</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-envelope"></i> suhafathima3110@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> +91 8861266616</p>
+                    <p><i class="fas fa-map-marker-alt"></i> chikkamagaluru,karnataka</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy;  Local Issues Reporter. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/data-manager.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/volunteers.js"></script>
+</body>
+</html>
